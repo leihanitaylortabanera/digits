@@ -11,7 +11,15 @@ const AdminPage = async () => {
       user: { email: string; id: string; name: string };
     } | null,
   );
-  const contacts = await prisma.contact.findMany({});
+  const contacts = await prisma.contact.findMany({
+    include: {
+      notes: {
+        orderBy: {
+          createdAt: 'desc',
+        },
+      },
+    },
+  });
 
   return (
     <main>

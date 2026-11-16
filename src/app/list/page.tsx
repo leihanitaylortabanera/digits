@@ -19,6 +19,14 @@ const ListPage = async () => {
       owner,
     },
   });
+  const notes = await prisma.note.findMany({
+    where: {
+      owner,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
   // console.log(contacts);
 
   return (
@@ -30,7 +38,10 @@ const ListPage = async () => {
             <Row xs={1} md={2} lg={3} className="g-4 pt-5">
               {contacts.map((contact) => (
                 <Col key={`Contact-${contact.firstName}`}>
-                  <ContactCard {...contact} />
+                  <ContactCard
+                    contact={contact}
+                    notes={notes.filter((note) => note.contactId === contact.id)}
+                  />
                 </Col>
               ))}
             </Row>
