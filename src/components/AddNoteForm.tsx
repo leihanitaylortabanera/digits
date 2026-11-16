@@ -35,7 +35,6 @@ const AddNoteForm = ({ contactId }: { contactId: number }) => {
   }
 
   const onSubmit = async (data: AddNoteFormValues) => {
-    resetField('note');
     await addNote(data);
   };
 

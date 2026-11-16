@@ -1,4 +1,4 @@
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/landing-page.png)
+![](doc/digits-landing-page.png)
 
 nextjs-application-template is a sample Next.js 16 application that illustrates:
 
@@ -187,182 +187,39 @@ For more information, see the [Playwright documentation](https://playwright.dev/
 
 ## Walkthrough
 
-The following sections describe the major features of this template.
+This walkthrough follows the main pages of the digits contact manager.
 
-### Directory structure
+### Landing page (`/`)
 
-The top-level directory structure is:
+The landing page introduces the address book, contact details, and timestamped notes. Visitors can use the Login menu to sign in or create an account.
 
-```
+### Sign in and sign up (`/auth/signin`, `/auth/signup`)
 
-.github # holds the GitHub Continuous Integration action and Issue template.
+Sign in with an existing account to open the contacts list. New users can register with an email and password; after registration, they are signed in and taken to Add Contact.
 
-config/ # holds configuration files, such as settings.development.json
+### Add Contact (`/add`)
 
-doc/ # holds developer documentation, user guides, etc.
+Signed-in users can create a contact by entering the person's first and last name, address, image URL, and description. The form associates the contact with the current user's email.
 
-prisma/ # holds the Prisma ORM schema and seed.ts files.
+### List Contacts (`/list`)
 
-public/ # holds the public images.
+This page displays the signed-in user's contacts. Each contact card shows its details and timestamped notes. The Add Timestamped Note form attaches a note to that contact, and the Edit link opens its edit page.
 
-src/ # holds the application files.
+### Edit Contact (`/edit/[id]`)
 
-tests/ # holds the Playwright acceptance tests.
+Users can update a contact's name, address, image, and description. Submitting the form saves the changes and returns to the contacts list.
 
-.eslintrc.json # The ESLint configuration.
+### Admin (`/admin`)
 
-.gitignore # don't commit VSCode settings files, node_modules, and settings.production.json
+Users with the ADMIN role can view contacts across all users, including their notes. Other users are not authorized to access this page.
 
-```
+### Account menu
 
-This structure separates documentation files (such as screenshots) and configuration files (such as the settings files) from the actual Next.js application.
+The account menu provides links to change the password and sign out. Visitors who are not signed in can use it to sign in or register.
 
-The src/ directory has this structure:
+### Data tables
 
-```
-
-app/
-
-  add/ # The add route
-    page.tsx # The Add Stuff Page
-
-  admin/
-    page.tsx # The Admin Page
-
-  api/auth/[...nextauth]/
-    route.ts # The NextAuth configuration
-
-  auth/
-    change-password/
-      page.tsx # The Change Password Page
-
-    signin/
-      page.tsx # The Sign In Page
-
-    signout/
-      page.tsx # The Sign Out Page
-
-    signup/
-      page.tsx # The Sign Up / Register Page
-
-  edit/
-    page.tsx # The Edit Stuff Page
-
-  list/
-    page.tsx # The List Stuff Page
-
-  not-authorized/
-    page.tsx # The Not Authorized Page
-
-  layout.tsx # The layout of the application
-
-  page.tsx # The Landing Page
-
-  providers.tsx # Session providers.
-
-  components/
-    AddStuffForm.tsx # The React Hook Form for adding stuff.
-
-    EditStuffForm.tsx # The Edit Stuff Form.
-
-    Footer.tsx # The application footer.
-
-    LoadingSpinner.tsx # Indicates working.
-
-    Navbar.tsx # The application navbar.
-
-    StuffItem.tsx # Row in the list stuff page.
-
-    StuffItemAdmin.tsx # Row in the admin list stuff page.
-
-  lib/
-
-    dbActions.ts # Functions to manipulate the Postgres database.
-
-    page-protections.ts # Functions to check for logged in users and their roles.
-
-    prisma.ts # Singleton Prisma client.
-
-    validationSchemas.ts # Yup schemas for validating forms.
-
-  tests/ # playwright acceptance tests.
-
-```
-
-### Application functionality
-
-The application implements a simple CRUD application for managing "Stuff", which is a PostgreSQL table consisting of a name (String), a quantity (Number), a condition (one of 'excellent', 'good', 'fair', or 'poor') and an owner.
-
-By default, each user only sees the Stuff that they have created. However, the settings file enables you to define default accounts. If you define a user with the role "admin", then that user gets access to a special page which lists all the Stuff defined by all users.
-
-#### Landing page
-
-When you retrieve the app at http://localhost:3000, this is what should be displayed:
-
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/landing-page.png)
-
-The next step is to use the Login menu to either Login to an existing account or register a new account.
-
-#### Login page
-
-Clicking on the Login link, then on the Sign In menu item displays this page:
-
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/signin-page.png)
-
-#### Register page
-
-Alternatively, clicking on the Login link, then on the Sign Up menu item displays this page:
-
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/register-page.png)
-
-#### Landing (after Login) page, non-Admin user
-
-Once you log in (either to an existing account or by creating a new one), the navbar changes as follows:
-
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/landing-after-login-page.png)
-
-You can now add new Stuff documents, and list the Stuff you have created. Note you cannot see any Stuff created by other users.
-
-#### Add Stuff page
-
-After logging in, here is the page that allows you to add new Stuff:
-
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/add-stuff-page.png)
-
-#### List Stuff page
-
-After logging in, here is the page that allows you to list all the Stuff you have created:
-
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/list-stuff-page.png)
-
-You click the "Edit" link to go to the Edit Stuff page, shown next.
-
-#### Edit Stuff page
-
-After clicking on the "Edit" link associated with an item, this page displays that allows you to change and save it:
-
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/edit-stuff-page.png)
-
-#### Landing (after Login), Admin user
-
-You can define an "admin" user in the settings.json file. This user, after logging in, gets a special entry in the navbar:
-
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/admin-landing-page.png)
-
-#### Admin page (list all users stuff)
-
-To provide a simple example of a "super power" for Admin users, the Admin page lists all of the Stuff by all of the users:
-
-![](https://github.com/ics-software-engineering/nextjs-application-template/raw/main/doc/admin-list-stuff-page.png)
-
-Note that non-admin users cannot get to this page, even if they type in the URL by hand.
-### Tables
-
-The application implements two tables "Stuff" and "User". Each Stuff row has the following columns: id, name, quantity, condition, and owner. The User table has the following columns: id, email, password (hashed using bcrypt), role.
-
-The Stuff and User models are defined in [prisma/schema.prisma](https://github.com/ics-software-engineering/nextjs-application-template/blob/main/prisma/schema.prisma).
-
-The tables are initialized in [prisma/seed.ts](https://github.com/ics-software-engineering/nextjs-application-template/blob/main/prisma/seed.ts) using the command `npx prisma db seed`.
+The database stores users, contacts, and notes. A contact can have multiple notes; each note records its text, owner, contact, and creation time. The models are defined in [prisma/schema.prisma](https://github.com/ics-software-engineering/nextjs-application-template/blob/main/prisma/schema.prisma), and sample users and contacts can be loaded with `npx prisma db seed`.
 
 ### CSS
 
@@ -387,7 +244,7 @@ body {
 
 ### Routing
 
-For display and navigation among its four pages, the application uses [Next.js App Router](https://nextjs.org/docs/app/building-your-application/routing).
+The application uses [Next.js App Router](https://nextjs.org/docs/app/building-your-application/routing). Page routes live under `src/app/`, including `/add`, `/list`, `/edit/[id]`, `/admin`, and the authentication pages.
 
 Routing is defined by the directory structure.
 
@@ -395,13 +252,13 @@ Routing is defined by the directory structure.
 
 For authentication, the application uses the NextAuth package.
 
-When the database is seeded, a settings file (such as [config/settings.development.json](https://github.com/ics-software-engineering/nextjs-application-template/blob/main/config/settings.development.json)) is used to create users and stuff in the PostgreSQL database. That will lead to a default accounts being created.
+When the database is seeded, [config/settings.development.json](https://github.com/ics-software-engineering/nextjs-application-template/blob/main/config/settings.development.json) provides default user accounts and contacts.
 
 The application allows users to register and create new accounts at any time.
 
 ### Authorization
 
-Only logged in users can manipulate Stuff items (but any registered user can manipulate any Stuff item, even if they weren't the user that created it.)
+Signed-in users can manage their contacts and notes. The `/admin` page is restricted to users with the ADMIN role.
 
 ### Configuration
 
